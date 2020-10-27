@@ -155,9 +155,8 @@ def main():
                               port='8443',
                               url_path=BOT_TOKEN,
                               key='private.key',
-                              cert='cert.pem')
-        updater.bot.set_webhook("https://{}/{}".format(HOST_URL, BOT_TOKEN))
-
+                              cert='cert.pem',
+                              webhook_url="https://{}/{}".format(HOST_URL, BOT_TOKEN))
 
 if __name__ == '__main__':
     main()
