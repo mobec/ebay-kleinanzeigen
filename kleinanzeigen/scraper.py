@@ -29,7 +29,6 @@ def scrape_articles_list(html: str) -> List[Article]:
 
         # price
         price_line = article.find(attrs={"class": "aditem-details"}).find("strong").string.strip()
-        negotiable = 'VB' in price_line
         price = price_line
 
         # time
@@ -40,7 +39,7 @@ def scrape_articles_list(html: str) -> List[Article]:
         if "Heute" in article_date:
             time = datetime.datetime.combine(datetime.date.today(), time.time())
 
-        scraped_articles.append(Article(ebay_kleinanzeigen_id, name, price, negotiable, relative_url, time))
+        scraped_articles.append(Article(ebay_kleinanzeigen_id, name, price, relative_url, time))
 
     return scraped_articles
 
