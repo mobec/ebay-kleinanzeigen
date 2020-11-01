@@ -1,8 +1,7 @@
-from article import Article
+from kleinanzeigen.article import Article
+
 from typing import List
 import requests
-
-import logging
 
 import re
 
@@ -28,8 +27,7 @@ def scrape_str(text: str) -> List[Article]:
 
         try:
             image = re.findall('imgsrc="(.*?)"', item, re.S)[0].strip()
-        except Exception as e:
-            logging.error(f'No image\n\t{item}')
+        except:
             continue
 
         items.append(Article(name, price, negotiable, url, date, image))

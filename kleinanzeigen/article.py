@@ -1,4 +1,3 @@
-
 class Article:
     def __init__(self, name: str, price: int, negotiable: bool, url: str, date: str, image: str):
         self.name = name

@@ -4,3 +4,4 @@
 !requirements.txt
 # include only .py files
 !*.py
+!kleinanzeigen/*.py

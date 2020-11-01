@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("urls", metavar='url', type=str, nargs='+', help="one or more urls containing ebay-kleinanzeigen.de searches.")
 args = parser.parse_args()
 
-import scraper
+from kleinanzeigen import scraper
 
 if not isinstance(args.urls, list):
     args.urls = [args.urls]
