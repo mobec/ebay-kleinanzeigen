@@ -47,11 +47,9 @@ class Item:
 
 
 def get_items_per_url(url):
-    qq = requests.get(url)
-
+    fake_user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
+    qq = requests.get(url, headers={'User-Agent': fake_user_agent})
     text = qq.text
-    # with open(r'C:\Users\Kleinanzeigen\Desktop\qq.html', 'r') as f:
-    #     text = f.read()
 
     articles = re.findall('<article(.*?)</article', text, re.S)
 
