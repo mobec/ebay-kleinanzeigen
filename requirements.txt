@@ -3,6 +3,8 @@ requests
 apscheduler
 SQLAlchemy
 CMRESHandler
+BeautifulSoup
+python-dateutil
 
 # Dependencies for Telegram bot
 python-telegram-bot==12.3.0

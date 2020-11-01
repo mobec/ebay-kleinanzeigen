@@ -3,40 +3,50 @@ from kleinanzeigen.article import Article
 from typing import List
 import requests
 
+from dateutil import parser as dparser
+import datetime
+
 import re
 
-def scrape_str(text: str) -> List[Article]:
-    articles = re.findall('<article(.*?)</article', text, re.S)
+from bs4 import BeautifulSoup
 
-    items = []
-    for item in articles:
-        if results := re.findall('<a.*?href="(.*?)">(.*?)</a>', item, re.S):
-            url, name = results[0]
-        else:
-            continue
+def scrape_articles_list(html: str) -> List[Article]:
+    soup = BeautifulSoup(html, 'html.parser')
 
-        price_line = re.findall('<strong>(.*?)</strong>', item, re.S)[0]
+    articles = soup.find_all("article", attrs={"class":"aditem"})
+
+    scraped_articles = []
+    for article in articles:
+        # parse article ID
+        ebay_kleinanzeigen_id = int(article.get('data-adid'))
+        
+        # name
+        article_ellipsis = article.find("a", attrs={"class": "ellipsis"})
+        name = article_ellipsis.string.strip()
+        
+        # url
+        relative_url = article_ellipsis.get("href")
+
+        # price
+        price_line = article.find(attrs={"class": "aditem-details"}).find("strong").string.strip()
         negotiable = 'VB' in price_line
-        price = None
-        if prices := re.findall(r'\d+', price_line, re.S):
-            price = int(prices[0])
+        price = price_line
 
-        date = re.findall('aditem-addon">(.*?)</', item, re.S)[0].strip()
-        if '{' in date or '<' in date:
-            continue
+        # time
+        article_date = article.find(attrs={"class": "aditem-addon"}).string.strip()
+        time = dparser.parse(article_date, fuzzy=True, dayfirst=True)
+        if "Gestern" in article_date:
+            time = datetime.datetime.combine(datetime.date.today() - datetime.timedelta(days=1), time.time())
+        if "Heute" in article_date:
+            time = datetime.datetime.combine(datetime.date.today(), time.time())
 
-        try:
-            image = re.findall('imgsrc="(.*?)"', item, re.S)[0].strip()
-        except:
-            continue
+        scraped_articles.append(Article(ebay_kleinanzeigen_id, name, price, negotiable, relative_url, time))
 
-        items.append(Article(name, price, negotiable, url, date, image))
-
-    return items
+    return scraped_articles
 
 def scrape_url(url: str) -> List[Article]:
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
     qq = requests.get(url, headers={'User-Agent': user_agent})
     text = qq.text
 
-    return scrape_str(text)
+    return scrape_articles_list(text)
