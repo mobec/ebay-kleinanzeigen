@@ -3,7 +3,7 @@ requests
 apscheduler
 SQLAlchemy
 CMRESHandler
-BeautifulSoup
+beautifulsoup4
 python-dateutil
 
 # Dependencies for Telegram bot
