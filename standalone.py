@@ -15,4 +15,6 @@ if not isinstance(args.urls, list):
 
 for url in list(args.urls):
     articles = scraper.scrape_url(url)
-    print(articles)
+    for article in articles:
+        print(str(article))
+        print()

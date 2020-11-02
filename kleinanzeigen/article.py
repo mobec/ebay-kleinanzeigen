@@ -13,9 +13,7 @@ class Article:
         return f'{self.name} - {self.price} - {self.date}'
 
     def __str__(self):
-        result = f'{self.name} - {self.price}'
-        result += f'\n\t{self.date}\n'
+        return self.to_markdown()
 
-        result += self.url
-        result += '\n'
-        return result
+    def to_markdown(self):
+        return f'[{self.name} - **{self.price}**]({self.url})'
