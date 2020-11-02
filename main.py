@@ -56,7 +56,7 @@ def echo(update: Update, context):
         if chat_id in last_items and item.url == last_items[chat_id]['last_item']:
             #log.info('Breaking the loop')
             break
-        msg.reply_markdown_v2(str(item))
+        msg.reply_markdown(str(item))
         # update.message.reply_photo(item.image)
     last_items[chat_id] = {'last_item': items[0].url, 'search_url': url}
 
