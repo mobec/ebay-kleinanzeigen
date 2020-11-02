@@ -27,7 +27,7 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     log = utils.get_logger()
     log.info('Start')
-    update.message.reply_text('Hi!')
+    update.message.reply_text("Cheers! Send me links to ebay-kleinanzeigen.de searches and I'll notify you when new items appear in them.")
 
 
 def error(update, context):
@@ -56,7 +56,7 @@ def echo(update: Update, context):
         if chat_id in last_items and item.url == last_items[chat_id]['last_item']:
             #log.info('Breaking the loop')
             break
-        msg.reply_text(str(item))
+        msg.reply_markdown_v2(str(item))
         # update.message.reply_photo(item.image)
     last_items[chat_id] = {'last_item': items[0].url, 'search_url': url}
 
