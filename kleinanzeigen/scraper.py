@@ -28,11 +28,19 @@ def scrape_articles_list(html: str) -> List[Article]:
         relative_url = article_ellipsis.get("href")
 
         # price
-        price_line = article.find(attrs={"class": "aditem-details"}).find("strong").string.strip()
+        article_details_price = article.find(attrs={"class": "aditem-details"}).find("strong")
+        if not article_details_price or not article_details_price.string:
+            # this is an ad tarned as article
+            continue
+        price_line = article_details_price.string.strip()
         price = price_line
 
         # time
-        article_date = article.find(attrs={"class": "aditem-addon"}).string.strip()
+        article_addon = article.find(attrs={"class": "aditem-addon"})
+        if not article_addon or not article_addon.string:
+            # this is an ad tarned as article
+            continue
+        article_date = article_addon.string.strip()
         time = dparser.parse(article_date, fuzzy=True, dayfirst=True)
         if "Gestern" in article_date:
             time = datetime.datetime.combine(datetime.date.today() - datetime.timedelta(days=1), time.time())
